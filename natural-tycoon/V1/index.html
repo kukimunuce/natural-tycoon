@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego</title>
+    <!-- Importar Material Design CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/material-design-lite@1.3.0/material.min.css">
+    <!-- Importar fuente Nunito -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap">
+    <style>
+       * {
+    box-sizing: border-box;
+}
+
+        /* Establecer la tipografía del juego a Nunito */
+        body, button, h2 {
+            font-family: 'Nunito', sans-serif;
+        }
+
+        body, html {
+    overflow-x: hidden; /* Esto oculta la barra de desplazamiento horizontal */
+}
+        h2 {
+            font-family: 'Nunito', sans-serif;
+            line-height: normal; /* Ajuste de la altura de línea */
+            margin-top: 0; /* Ajuste del margen superior */
+            margin-bottom: 4px; /* Ajuste del margen inferior */
+        }
+
+        /* Estilo para la barra lateral */
+     #barra-lateral {
+    width: 25%;
+    height: 100vh;
+    background: #FFF;
+    box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.25);
+    position: fixed;
+    overflow-y: auto;
+    padding: 10px;
+    float: left; /* Asegúrate de tener esta línea */
+        }
+
+        /* Estilo para las cajas contenedoras */
+        .mdl-card {
+            border-radius: 10px;
+            border: 1px solid #EFEFEF;
+            background: #FFF;
+            box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+            margin-bottom: 10px;
+            width: 100%;
+            text-align: center;
+            padding: 16px;
+        }
+
+        .mdl-card p {
+            text-align: left;
+            padding-left: 16px;
+        }
+
+        /* Estilo para los botones */
+        .mdl-button {
+            border-radius: 50px;
+            background: #A7C53D; /* Disponible */
+            text-transform: capitalize; /* Mayúscula solo en la primera letra de cada palabra */
+            color: #ffffff; /* Color de texto blanco */
+            font-weight: bold; /* Texto en negritas */
+            margin:  4px;
+            border: none; /* Remover bordes predeterminados */
+            cursor: pointer; /* Cambiar cursor a mano al pasar sobre el botón */
+            transition: background 0.3s; /* Transición suave de color de fondo */
+        }
+
+        /* Estilo para los botones cuando se pasa el cursor */
+        .mdl-button:hover {
+            background: #7C9620; /* Mouse over */
+        }
+
+        /* Estilo para los botones cuando se apretan */
+        .mdl-button:active {
+            background: #687E19; /* Apretado */
+        }
+
+        /* Estilo para los botones deshabilitados */
+        .mdl-button[disabled] {
+            background: #D4D4D4 !important; /* Deshabilitado */
+            color: #ABA6A6 !important; /* Color de texto para deshabilitado */
+        }
+
+        /* Estilo para el reloj y el saldo */
+        #reloj, #saldo {
+            margin: 0; /* Margin top y bottom establecido a 0 */
+            width: 100%;
+            text-align: left;  /* Alineación a la izquierda */
+            border: none;  /* Remover borde */
+            box-shadow: none;  /* Remover sombra */
+            padding-left: 16px;  /* Padding a la izquierda */
+        }
+
+        /* Estilo para el texto del reloj */
+        #reloj-texto {
+            color: #B5B5B5;
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        /* Estilo para el texto del saldo */
+        #saldo-texto {
+            color: #3D3C3C;
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        /* Estilo para el main-body */
+        #main-body {
+              width: 75%;
+    height: 100vh;
+    margin-left: 25%; /* Añade esta línea */
+    overflow-y: auto;
+    padding: 10px;
+    background-color: #bcdc49;
+    font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Barra lateral -->
+    <aside id="barra-lateral">
+        <!-- Reloj -->
+        <div id="reloj">
+            <h2 id="reloj-texto">📅 00 años 00 mes</h2>
+        </div>
+        
+        <!-- Saldo -->
+        <div id="saldo">
+            <h2 id="saldo-texto">💸 $1000</h2>
+        </div>
+        
+        <!-- Línea divisoria -->
+        <div style="height: 2px; background-color: #F0F1F3; border-radius: 1px; margin: 10px 0;"></div>
+
+        <!-- M^2 y Botón para comprar -->
+        <div id="slots" class="mdl-card mdl-shadow--2dp">
+            <p>M<sup>2</sup>: <span id="slots-texto">0</span>/<span id="M2-total" style="color: lightgray;">250000</span></p>
+            <p>M<sup>2</sup> Disponibles: <span id="slots-disponibles">0</span></p>
+            <p>M<sup>2</sup> de Áreas Protegidas: <span id="areas-protegidas">0</span></p>
+            <button id="boton-tierra" onclick="comprarSlot()" class="mdl-button mdl-js-button">Comprar Tierra</button>
+        </div>
+        
+        <!-- Árboles, Árboles Adultos, Árboles Protegidos y Botones para comprar, talar y proteger -->
+        <div id="arboles" class="mdl-card mdl-shadow--2dp">
+            <p>Árboles: <span id="arboles-texto">0</span></p>
+            <p>Árboles Adultos: <span id="arboles-adultos">0</span></p>
+            <p>Árboles Protegidos: <span id="arboles-protegidos">0</span></p>
+            <button id="boton-arbol" onclick="comprarArbol()" class="mdl-button mdl-js-button">Plantar Árbol</button>
+            <button id="boton-talar" onclick="talarYVender()" class="mdl-button mdl-js-button">Talar y Vender</button>
+            <button id="boton-proteger" onclick="protegerArbol()" class="mdl-button mdl-js-button">Proteger Árbol</button>
+        </div>
+    </aside>
+
+    <!-- Main Body -->
+    <main id="main-body"></main>
+
+    <!-- Importar JavaScript personalizado primero -->
+    <script src="script.js"></script>
+    <!-- Luego importar Material Design -->
+    <script defer src="https://cdn.jsdelivr.net/npm/material-design-lite@1.3.0/material.min.js"></script>
+
+</body>
+</html>
